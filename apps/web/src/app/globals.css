@@ -1,0 +1,108 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --foreground-rgb: 23, 23, 23;
+  --background-rgb: 255, 255, 255;
+}
+
+body {
+  color: rgb(var(--foreground-rgb));
+  background: rgb(var(--background-rgb));
+  font-family: "Inter", system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+@layer components {
+  .input-base {
+    @apply w-full rounded-lg border border-gray-300 bg-white px-4 py-3 text-gray-900 
+           placeholder-gray-400 transition-colors duration-200
+           focus:border-primary-500 focus:outline-none focus:ring-2 
+           focus:ring-primary-500/20;
+  }
+
+  .btn-primary {
+    @apply rounded-lg bg-primary-500 px-6 py-3 font-semibold text-white 
+           transition-colors duration-200 hover:bg-primary-600 
+           focus:outline-none focus:ring-2 focus:ring-primary-500/20 
+           disabled:cursor-not-allowed disabled:opacity-50;
+  }
+
+  .btn-secondary {
+    @apply rounded-lg border border-gray-300 bg-white px-6 py-3 
+           font-semibold text-gray-700 transition-colors duration-200 
+           hover:bg-gray-50 focus:outline-none focus:ring-2 
+           focus:ring-gray-500/20;
+  }
+
+  .btn-outline {
+    @apply rounded-lg border-2 border-primary-500 bg-transparent px-6 py-3 
+           font-semibold text-primary-500 transition-colors duration-200 
+           hover:bg-primary-500 hover:text-white;
+  }
+
+  .card-product {
+    @apply overflow-hidden rounded-xl border border-gray-100 bg-white 
+           shadow-sm transition-all duration-200 hover:shadow-lg hover:border-primary-200;
+  }
+
+  .badge {
+    @apply inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-medium;
+  }
+
+  .badge-success {
+    @apply badge bg-green-100 text-green-800;
+  }
+
+  .badge-warning {
+    @apply badge bg-yellow-100 text-yellow-800;
+  }
+
+  .badge-danger {
+    @apply badge bg-red-100 text-red-800;
+  }
+
+  .sidebar-link {
+    @apply flex items-center gap-3 rounded-lg px-4 py-2.5 text-sm font-medium 
+           text-gray-600 transition-all duration-150 hover:bg-primary-50 hover:text-primary-600;
+  }
+
+  .sidebar-link-active {
+    @apply sidebar-link bg-primary-50 text-primary-600;
+  }
+}
+
+.price-format {
+  font-variant-numeric: tabular-nums;
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, #f5f5f5 25%, #ebebeb 50%, #f5f5f5 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+/* Scrollbar customizada */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f1f1f1;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #c0c0c0;
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #a0a0a0;
+}

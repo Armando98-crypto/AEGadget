@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Finalizar encomenda — AEGADGET</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  .steps{ display:flex; gap:0; margin-bottom:44px; }
+  .step{ display:flex; align-items:center; gap:10px; padding-right:26px; margin-right:26px; border-right:1px solid var(--hairline); font-family:var(--f-mono); font-size:.8rem; color:var(--ink-soft); }
+  .step:last-child{ border:none; }
+  .step-num{ width:22px;height:22px; border:1.5px solid var(--hairline-2); display:flex; align-items:center; justify-content:center; font-size:.72rem; }
+  .step.active{ color:var(--ink); }
+  .step.active .step-num{ background:var(--orange); border-color:var(--orange); color:#fff; }
+  .pay-option{ border:1.5px solid var(--hairline-2); padding:18px 20px; display:flex; gap:14px; align-items:flex-start; cursor:pointer; margin-bottom:14px; }
+  .pay-option.selected{ border-color:var(--orange); background:var(--orange-soft); }
+  .field-error{ display:none; color:#C7390B; font-size:.76rem; margin-top:6px; }
+</style>
+</head>
+<body>
+
+<div class="topbar"><div class="wrap"><span>Entrega em <strong>Lubango</strong> · outras províncias sob consulta</span><span>Pagamento: Multicaixa Express · Transferência · Na entrega</span></div></div>
+
+<header class="site">
+  <nav class="wrap nav">
+    <a href="index.html" class="logo"><span class="bolt"></span>AE<b>GADGET</b></a>
+    <ul class="navlinks"><li><a href="index.html">Início</a></li><li><a href="produtos.html">Produtos</a></li></ul>
+    <div class="navactions">
+      <a href="carrinho.html" class="iconbtn" aria-label="Carrinho"><svg viewBox="0 0 24 24" fill="none" stroke="#17130F" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="20" r="1"/><circle cx="18" cy="20" r="1"/><path d="M2.5 3h2l2.6 12.4a2 2 0 0 0 2 1.6h7.8a2 2 0 0 0 2-1.6L21 7H5.4"/></svg><span class="cart-count">2</span></a>
+      <button class="burger" aria-label="Menu"><svg viewBox="0 0 24 24" fill="none" stroke="#17130F" stroke-width="1.8" stroke-linecap="round"><path d="M3 6h18M3 12h18M3 18h18"/></svg></button>
+    </div>
+  </nav>
+</header>
+
+<div class="wrap crumbs"><a href="index.html">Início</a><span>/</span><a href="carrinho.html">Carrinho</a><span>/</span><span>Finalizar encomenda</span></div>
+
+<section style="padding-top:26px;">
+  <div class="wrap">
+    <span class="eyebrow">Checkout</span>
+    <h1 style="font-size:2rem; margin-top:10px;">Finalizar encomenda</h1>
+
+    <div class="steps" style="margin-top:34px;">
+      <div class="step active"><span class="step-num">1</span> Morada de entrega</div>
+      <div class="step"><span class="step-num">2</span> Pagamento</div>
+      <div class="step"><span class="step-num">3</span> Confirmação</div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:50px; align-items:start;">
+      <form data-validate>
+
+        <h3 style="font-size:1.05rem; margin-bottom:20px;">Morada de entrega</h3>
+        <div class="field-row">
+          <div class="field">
+            <label>Nome completo</label>
+            <input type="text" placeholder="O teu nome" required>
+            <span class="field-error">Introduz o teu nome completo.</span>
+          </div>
+          <div class="field">
+            <label>Telefone</label>
+            <input type="tel" placeholder="+244 9XX XXX XXX" required>
+            <span class="field-error">Introduz um número de telefone válido.</span>
+          </div>
+        </div>
+        <div class="field">
+          <label>Província</label>
+          <select required>
+            <option value="">Selecionar…</option>
+            <option selected>Huíla</option>
+            <option>Luanda</option>
+            <option>Benguela</option>
+            <option>Huambo</option>
+          </select>
+        </div>
+        <div class="field-row">
+          <div class="field">
+            <label>Município</label>
+            <input type="text" value="Lubango" required>
+          </div>
+          <div class="field">
+            <label>Bairro</label>
+            <input type="text" placeholder="Ex: Comercial" required>
+          </div>
+        </div>
+        <div class="field">
+          <label>Endereço / referência</label>
+          <textarea rows="3" placeholder="Rua, número, ponto de referência (ex: perto da Igreja Nossa Senhora do Monte)" required></textarea>
+          <small>Em Lubango nem sempre há código postal — descreve um ponto de referência conhecido.</small>
+        </div>
+
+        <h3 style="font-size:1.05rem; margin:36px 0 20px;">Método de pagamento</h3>
+
+        <label class="pay-option selected">
+          <input type="radio" name="pagamento" checked style="margin-top:3px;">
+          <div>
+            <strong style="font-family:var(--f-head); font-size:.94rem;">Multicaixa Express</strong>
+            <p style="font-size:.85rem; color:var(--ink-soft); margin-top:4px;">Recebes uma referência de pagamento para usar no ATM ou app Multicaixa.</p>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="pagamento" style="margin-top:3px;">
+          <div>
+            <strong style="font-family:var(--f-head); font-size:.94rem;">Transferência bancária</strong>
+            <p style="font-size:.85rem; color:var(--ink-soft); margin-top:4px;">Enviamos os dados da conta AEGADGET após confirmares a encomenda.</p>
+          </div>
+        </label>
+        <label class="pay-option">
+          <input type="radio" name="pagamento" style="margin-top:3px;">
+          <div>
+            <strong style="font-family:var(--f-head); font-size:.94rem;">Pagamento na entrega</strong>
+            <p style="font-size:.85rem; color:var(--ink-soft); margin-top:4px;">Paga em dinheiro ao estafeta quando a encomenda chegar (só Lubango).</p>
+          </div>
+        </label>
+
+        <div class="form-success" style="display:none; margin-top:20px; padding:14px 18px; background:var(--orange-soft); color:var(--orange-deep); font-size:.88rem;">
+          Encomenda pronta a confirmar — este é um protótipo visual, sem ligação real ao pagamento.
+        </div>
+
+        <button class="btn btn-primary btn-block" style="margin-top:28px;">Confirmar encomenda</button>
+      </form>
+
+      <div class="summary" style="background:var(--paper); border:1px solid var(--hairline); padding:30px;">
+        <h3 style="font-size:1.05rem; margin-bottom:20px;">O teu pedido</h3>
+        <div style="display:flex; justify-content:space-between; font-size:.88rem; margin-bottom:12px;"><span>Aegadget Nova X5 <span class="mono-tag" style="color:var(--ink-soft);">×1</span></span><span class="mono-tag">245.000,00 Kz</span></div>
+        <div style="display:flex; justify-content:space-between; font-size:.88rem; margin-bottom:12px;"><span>Auscultadores ProSound <span class="mono-tag" style="color:var(--ink-soft);">×1</span></span><span class="mono-tag">18.500,00 Kz</span></div>
+        <div style="border-top:1px solid var(--hairline); margin-top:14px; padding-top:14px;">
+          <div style="display:flex; justify-content:space-between; font-size:.88rem; color:var(--ink-soft); margin-bottom:8px;"><span>Subtotal</span><span class="mono-tag">263.500,00 Kz</span></div>
+          <div style="display:flex; justify-content:space-between; font-size:.88rem; color:var(--ink-soft); margin-bottom:8px;"><span>Entrega</span><span class="mono-tag">2.000,00 Kz</span></div>
+          <div style="display:flex; justify-content:space-between; font-weight:700; font-family:var(--f-head); font-size:1.1rem; margin-top:12px;"><span>Total</span><span class="mono-tag">265.500,00 Kz</span></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer class="site">
+  <div class="wrap">
+    <div><div class="logo"><span class="bolt"></span>AE<b>GADGET</b></div><p style="max-width:280px;font-size:.88rem;color:#B8AC9D;">Gadgets e eletrónica em Lubango.</p></div>
+    <div><h4>Loja</h4><ul><li><a href="produtos.html">Todos os produtos</a></li></ul></div>
+    <div><h4>Apoio ao cliente</h4><ul><li><a href="#">Como comprar</a></li></ul></div>
+    <div><h4>Contacto</h4><ul><li>Rua Comandante Dangereux, Lubango</li></ul></div>
+  </div>
+  <div class="wrap bottom"><span>© 2026 AEGADGET, Lda.</span><span>Feito no Lubango</span></div>
+</footer>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

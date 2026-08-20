@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="pt-AO">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Painel AEGADGET — Administração</title>
+<link rel="stylesheet" href="assets/css/style.css">
+<style>
+  body{ background:var(--paper); }
+  .admin-shell{ display:grid; grid-template-columns:250px 1fr; min-height:100vh; }
+  .admin-side{ background:var(--ink); color:#EFE6DC; padding:26px 20px; display:flex; flex-direction:column; }
+  .admin-side .logo{ color:#fff; margin-bottom:40px; }
+  .admin-nav a{ display:flex; align-items:center; gap:12px; padding:12px 14px; font-family:var(--f-head); font-weight:600; font-size:.88rem; color:#B8AC9D; margin-bottom:4px; }
+  .admin-nav a.active, .admin-nav a:hover{ background:#241E17; color:#fff; }
+  .admin-nav a.active{ border-left:3px solid var(--orange); }
+  .admin-side .admin-back{ margin-top:auto; padding-top:20px; border-top:1px solid #2C261F; font-size:.82rem; color:#8A7F72; }
+  .admin-main{ padding:34px 40px; }
+  .admin-top{ display:flex; justify-content:space-between; align-items:center; margin-bottom:32px; }
+  .kpi{ background:#fff; border:1px solid var(--hairline); padding:22px 24px; }
+  .kpi .mono-tag{ color:var(--ink-soft); }
+  .kpi .value{ font-family:var(--f-head); font-size:1.7rem; margin-top:8px; }
+  .kpi .delta{ font-family:var(--f-mono); font-size:.74rem; color:var(--orange-deep); margin-top:6px; display:inline-block;}
+  table.admin-table{ width:100%; border-collapse:collapse; background:#fff; }
+  table.admin-table th{ text-align:left; font-family:var(--f-mono); font-size:.7rem; text-transform:uppercase; letter-spacing:.05em; color:var(--ink-soft); padding:14px 16px; border-bottom:1.5px solid var(--hairline); }
+  table.admin-table td{ padding:14px 16px; border-bottom:1px solid var(--hairline); font-size:.88rem; }
+  .status-pill{ font-family:var(--f-mono); font-size:.7rem; padding:4px 10px; text-transform:uppercase; }
+  .status-pendente{ background:#FFE6D6; color:#C7390B; }
+  .status-confirmado{ background:#FFF3D6; color:#946A00; }
+  .status-enviado{ background:#DCE9FF; color:#1F4FA8; }
+  .status-entregue{ background:#DDF3DE; color:#1F7A2E; }
+  @media(max-width:900px){ .admin-shell{ grid-template-columns:1fr; } .admin-side{ display:none; } }
+</style>
+</head>
+<body>
+
+<div class="admin-shell">
+  <aside class="admin-side">
+    <div class="logo"><span class="bolt"></span>AE<b>GADGET</b></div>
+    <nav class="admin-nav">
+      <a href="admin.html" class="active"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg> Dashboard</a>
+      <a href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><rect x="7" y="2" width="10" height="20" rx="2"/></svg> Produtos</a>
+      <a href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M20 12V8H6.2a2 2 0 0 1-2-1.6L3.6 3H2"/><circle cx="6" cy="20" r="1.6"/><circle cx="16" cy="20" r="1.6"/><path d="M4.4 8 6 16h10l3-8"/></svg> Encomendas</a>
+      <a href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M4 4h6l2 3h8v10H4z"/></svg> Categorias</a>
+      <a href="#"><svg width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg> Clientes</a>
+    </nav>
+    <div class="admin-back">
+      <a href="index.html" style="color:#B8AC9D;">← Voltar à loja</a>
+    </div>
+  </aside>
+
+  <main class="admin-main">
+    <div class="admin-top">
+      <div>
+        <span class="eyebrow">Painel administrativo</span>
+        <h1 style="font-size:1.7rem; margin-top:8px;">Olá, AEGADGET 👋</h1>
+      </div>
+      <button class="btn btn-primary">+ Novo produto</button>
+    </div>
+
+    <div class="grid grid-4">
+      <div class="kpi">
+        <div class="mono-tag">Vendas este mês</div>
+        <div class="value">4.820.000<small style="font-size:1rem;"> Kz</small></div>
+        <span class="delta">▲ 12% vs. mês anterior</span>
+      </div>
+      <div class="kpi">
+        <div class="mono-tag">Encomendas pendentes</div>
+        <div class="value">7</div>
+        <span class="delta" style="color:#946A00;">A aguardar confirmação</span>
+      </div>
+      <div class="kpi">
+        <div class="mono-tag">Produtos com pouco stock</div>
+        <div class="value">4</div>
+        <span class="delta">Abaixo de 5 unidades</span>
+      </div>
+      <div class="kpi">
+        <div class="mono-tag">Clientes novos</div>
+        <div class="value">31</div>
+        <span class="delta">▲ 6% esta semana</span>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1.6fr 1fr; gap:26px; margin-top:34px; align-items:start;">
+
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h3 style="font-size:1.05rem;">Encomendas recentes</h3>
+          <a href="#" class="btn-ghost" style="font-size:.82rem;">Ver todas →</a>
+        </div>
+        <table class="admin-table">
+          <thead><tr><th>Encomenda</th><th>Cliente</th><th>Total</th><th>Estado</th></tr></thead>
+          <tbody>
+            <tr><td class="mono-tag">#AG-1042</td><td>Sokuama Lucamba</td><td class="mono-tag">265.500,00 Kz</td><td><span class="status-pill status-pendente">Pendente</span></td></tr>
+            <tr><td class="mono-tag">#AG-1041</td><td>Edson Kapenda</td><td class="mono-tag">42.000,00 Kz</td><td><span class="status-pill status-confirmado">Confirmado</span></td></tr>
+            <tr><td class="mono-tag">#AG-1040</td><td>Marta Ndumba</td><td class="mono-tag">18.500,00 Kz</td><td><span class="status-pill status-enviado">Enviado</span></td></tr>
+            <tr><td class="mono-tag">#AG-1039</td><td>Filipe Chindondo</td><td class="mono-tag">138.000,00 Kz</td><td><span class="status-pill status-entregue">Entregue</span></td></tr>
+            <tr><td class="mono-tag">#AG-1038</td><td>Adélia Cachinda</td><td class="mono-tag">15.900,00 Kz</td><td><span class="status-pill status-entregue">Entregue</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div>
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <h3 style="font-size:1.05rem;">Stock baixo</h3>
+        </div>
+        <div class="notch-card" style="background:#fff;">
+          <div style="padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--hairline);">
+            <div><div style="font-family:var(--f-head); font-weight:600; font-size:.88rem;">Drone SkyView Mini 4K</div><span class="mono-tag" style="color:var(--ink-soft);">2 unidades</span></div>
+            <span class="charge"><span class="charge-cell on"></span><span class="charge-cell"></span><span class="charge-cell"></span><span class="charge-cell"></span></span>
+          </div>
+          <div style="padding:16px 20px; display:flex; justify-content:space-between; align-items:center; border-bottom:1px solid var(--hairline);">
+            <div><div style="font-family:var(--f-head); font-weight:600; font-size:.88rem;">Smartwatch FitPulse 2</div><span class="mono-tag" style="color:var(--ink-soft);">3 unidades</span></div>
+            <span class="charge"><span class="charge-cell on"></span><span class="charge-cell low"></span><span class="charge-cell"></span><span class="charge-cell"></span></span>
+          </div>
+          <div style="padding:16px 20px; display:flex; justify-content:space-between; align-items:center;">
+            <div><div style="font-family:var(--f-head); font-weight:600; font-size:.88rem;">Auriculares TWS AirBeat</div><span class="mono-tag" style="color:var(--ink-soft);">1 unidade</span></div>
+            <span class="charge"><span class="charge-cell on"></span><span class="charge-cell"></span><span class="charge-cell"></span><span class="charge-cell"></span></span>
+          </div>
+        </div>
+
+        <div style="margin-top:24px;">
+          <h3 style="font-size:1.05rem; margin-bottom:14px;">Ações rápidas</h3>
+          <a href="#" class="btn btn-outline btn-block" style="margin-bottom:10px;">Gerir categorias</a>
+          <a href="#" class="btn btn-outline btn-block">Exportar relatório de vendas</a>
+        </div>
+      </div>
+    </div>
+
+    <!-- CRUD de produtos -->
+    <div style="margin-top:44px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+        <h3 style="font-size:1.05rem;">Produtos</h3>
+        <input type="search" placeholder="Pesquisar produto…" style="padding:9px 14px; border:1.5px solid var(--hairline-2); font-size:.85rem;">
+      </div>
+      <table class="admin-table">
+        <thead><tr><th>Produto</th><th>Categoria</th><th>Preço</th><th>Stock</th><th>Estado</th><th></th></tr></thead>
+        <tbody>
+          <tr>
+            <td style="display:flex; align-items:center; gap:12px; font-family:var(--f-head); font-weight:600;"><span style="width:34px;height:34px;background:var(--paper);border:1px solid var(--hairline); display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17130F" stroke-width="1.4"><rect x="7" y="2" width="10" height="20" rx="2"/></svg></span>Aegadget Nova X5 128GB</td>
+            <td class="mono-tag">Smartphones</td><td class="mono-tag">245.000,00 Kz</td><td class="mono-tag">14</td>
+            <td><span class="status-pill status-entregue">Ativo</span></td>
+            <td><a href="#" class="btn-ghost" style="font-size:.78rem;">Editar</a></td>
+          </tr>
+          <tr>
+            <td style="display:flex; align-items:center; gap:12px; font-family:var(--f-head); font-weight:600;"><span style="width:34px;height:34px;background:var(--paper);border:1px solid var(--hairline); display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17130F" stroke-width="1.4"><path d="M3 14v-2a9 9 0 0 1 18 0v2"/></svg></span>Auscultadores ProSound BT</td>
+            <td class="mono-tag">Áudio</td><td class="mono-tag">18.500,00 Kz</td><td class="mono-tag">22</td>
+            <td><span class="status-pill status-entregue">Ativo</span></td>
+            <td><a href="#" class="btn-ghost" style="font-size:.78rem;">Editar</a></td>
+          </tr>
+          <tr>
+            <td style="display:flex; align-items:center; gap:12px; font-family:var(--f-head); font-weight:600;"><span style="width:34px;height:34px;background:var(--paper);border:1px solid var(--hairline); display:inline-flex; align-items:center; justify-content:center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#17130F" stroke-width="1.4"><path d="M13 2 4 14h6l-1 8 9-12h-6z"/></svg></span>Powerbank 20000mAh Turbo</td>
+            <td class="mono-tag">Energia</td><td class="mono-tag">15.900,00 Kz</td><td class="mono-tag">0</td>
+            <td><span class="status-pill status-pendente">Esgotado</span></td>
+            <td><a href="#" class="btn-ghost" style="font-size:.78rem;">Editar</a></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </main>
+</div>
+
+<script src="assets/js/main.js"></script>
+</body>
+</html>

@@ -1,0 +1,380 @@
+// ============================================
+// AE GADGET — Schema Prisma
+// Base de dados PostgreSQL
+// ============================================
+//
+// Este schema foi desenhado para suportar multi-vendor no futuro,
+// mesmo que nesta fase 1 apenas exista um vendedor (AEGADGET).
+//
+// Para executar as migrações:
+//   npx prisma migrate dev --name inicial
+//
+// Para gerar o Prisma Client:
+//   npx prisma generate
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// ============================================
+// MODELOS DE UTILIZADORES E AUTENTICAÇÃO
+// ============================================
+
+/// Utilizadores da plataforma (clientes, admins, vendedores)
+model User {
+  id            String    @id @default(cuid())
+  nome          String    @db.VarChar(255)
+  email         String    @unique @db.VarChar(255)
+  telefone      String?   @db.VarChar(20) // Formato: +244XXXXXXXXX
+  passwordHash  String    @map("password_hash")
+  role          UserRole  @default(CUSTOMER)
+  createdAt     DateTime  @default(now()) @map("created_at")
+  updatedAt     DateTime  @updatedAt @map("updated_at")
+
+  // Relações
+  vendor        Vendor?
+  orders        Order[]
+  reviews       Review[]
+  cart          Cart?
+  addresses     Address[]
+  wishlist      Wishlist[]
+
+  @@map("users")
+}
+
+/// Roles de utilizador — preparado para multi-vendor
+enum UserRole {
+  CUSTOMER   // Cliente normal
+  VENDOR     // Vendedor/fornecedor
+  ADMIN      // Administrador da plataforma
+}
+
+// ============================================
+// MODELOS DE VENDEDORES (PREPARADO PARA FUTURO MULTI-VENDOR)
+// ============================================
+
+/// Vendedores/lojas na plataforma.
+/// Na fase 1, apenas existe 1 registo (AEGADGET).
+/// A estrutura já suporta N vendedores sem alterações de schema.
+model Vendor {
+  id          String   @id @default(cuid())
+  nome        String   @db.VarChar(255) // Nome da loja/vendedor
+  descricao   String?  @db.Text
+  logoUrl     String?  @map("logo_url") @db.VarChar(500)
+  userId      String   @unique @map("user_id") // Dono da conta vendedor
+  verificado  Boolean  @default(false) // Verificado pela plataforma
+  ativo       Boolean  @default(true)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relações
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  products    Product[]
+  orders      Order[]
+
+  @@map("vendors")
+}
+
+// ============================================
+// MODELOS DE CATÁLOGO (PRODUTOS E CATEGORIAS)
+// ============================================
+
+/// Categorias de produtos — suporta subcategorias (hierarquia)
+model Category {
+  id              String     @id @default(cuid())
+  nome            String     @db.VarChar(255)
+  slug            String     @unique @db.VarChar(255) // URL-friendly: "smartphones"
+  descricao       String?    @db.Text
+  imagemUrl       String?    @map("imagem_url") @db.VarChar(500)
+  categoriaPaiId  String?    @map("categoria_pai_id") // Para subcategorias
+  ativo           Boolean    @default(true)
+  createdAt       DateTime   @default(now()) @map("created_at")
+  updatedAt       DateTime   @updatedAt @map("updated_at")
+
+  // Auto-relação para categorias pai/filho
+  categoriaPai    Category?  @relation("CategoryTree", fields: [categoriaPaiId], references: [id], onDelete: SetNull)
+  subcategorias   Category[] @relation("CategoryTree")
+  products        Product[]
+
+  @@map("categories")
+}
+
+/// Produtos da plataforma
+model Product {
+  id            String        @id @default(cuid())
+  vendorId      String        @map("vendor_id")
+  categoryId    String?       @map("category_id")
+  nome          String        @db.VarChar(255)
+  descricao     String        @db.Text
+  preco         Decimal       @db.Decimal(12, 2) // Preço em Kwanza (AOA) — até 999.999.999,99
+  stock         Int           @default(0)
+  estado        ProductState  @default(ATIVO)
+  slug          String        @unique @db.VarChar(255) // URL-friendly
+  createdAt     DateTime      @default(now()) @map("created_at")
+  updatedAt     DateTime      @updatedAt @map("updated_at")
+
+  // Relações
+  vendor        Vendor        @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  category      Category?     @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  images        ProductImage[]
+  orderItems    OrderItem[]
+  reviews       Review[]
+  cartItems     CartItem[]
+  wishlist      Wishlist[]
+
+  @@index([vendorId])
+  @@index([categoryId])
+  @@index([nome])
+  @@index([preco])
+  @@index([estado])
+  @@map("products")
+}
+
+/// Estado de um produto
+enum ProductState {
+  ATIVO      // Visível e disponível para compra
+  INATIVO    // Desativado pelo vendedor/admin
+  ESGOTADO   // Sem stock
+}
+
+/// Imagens de produto — permite múltiplas imagens por produto
+model ProductImage {
+  id          String   @id @default(cuid())
+  productId   String   @map("product_id")
+  url         String   @db.VarChar(500)
+  ordem       Int      @default(0) // Ordem de exibição (0 = principal)
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relações
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId])
+  @@map("product_images")
+}
+
+// ============================================
+// MODELOS DE CARRINHO DE COMPRAS
+// ============================================
+
+/// Carrinho de compras — um por utilizador
+model Cart {
+  id          String     @id @default(cuid())
+  userId      String     @unique @map("user_id")
+  createdAt   DateTime   @default(now()) @map("created_at")
+  updatedAt   DateTime   @updatedAt @map("updated_at")
+
+  // Relações
+  user        User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items       CartItem[]
+
+  @@map("carts")
+}
+
+/// Itens dentro do carrinho
+model CartItem {
+  id          String   @id @default(cuid())
+  cartId      String   @map("cart_id")
+  productId   String   @map("product_id")
+  quantidade  Int      @default(1)
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relações
+  cart        Cart     @relation(fields: [cartId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Um produto só pode aparecer uma vez no carrinho
+  @@unique([cartId, productId])
+  @@map("cart_items")
+}
+
+// ============================================
+// MODELOS DE ENCOMENDAS (ORDERS)
+// ============================================
+
+/// Encomenda/pedido — suporta múltiplos métodos de pagamento
+model Order {
+  id                String      @id @default(cuid())
+  userId            String      @map("user_id")
+  vendorId          String      @map("vendor_id")
+  status            OrderStatus @default(PENDENTE)
+  total             Decimal     @db.Decimal(12, 2) // Total em Kwanza (AOA)
+  
+  // Método de pagamento — suporta Multicaixa Express, transferência, etc.
+  metodoPagamento   PaymentMethod @map("metodo_pagamento") @default(REFERENCIA)
+  
+  // Referência de pagamento (ex: código Multicaixa Express)
+  referenciaPagamento String?   @map("referencia_pagamento") @db.VarChar(100)
+  
+  // Endereço de entrega (snapshot no momento da compra)
+  enderecoEntrega   Json        @map("endereco_entrega") // {rua, bairro, municipio, provincia, referencia}
+  
+  // Notas do cliente (ex: "Entregar depois das 18h")
+  notas             String?     @db.Text
+  
+  // Cupão aplicado (opcional)
+  couponId          String?     @map("coupon_id")
+  desconto          Decimal?    @db.Decimal(12, 2) // Valor do desconto aplicado
+  
+  createdAt         DateTime    @default(now()) @map("created_at")
+  updatedAt         DateTime    @updatedAt @map("updated_at")
+
+  // Relações
+  user              User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  vendor            Vendor      @relation(fields: [vendorId], references: [id], onDelete: Cascade)
+  coupon            Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  items             OrderItem[]
+
+  @@index([userId])
+  @@index([vendorId])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+/// Estado de uma encomenda
+enum OrderStatus {
+  PENDENTE      // Criada, aguarda pagamento/confirmacao
+  CONFIRMADO    // Pagamento confirmado
+  EM_SEPARACAO  // Sendo preparado para envio
+  ENVIADO       // Enviado para entrega
+  ENTREGUE      // Entregue ao cliente
+  CANCELADO     // Cancelado
+}
+
+/// Métodos de pagamento suportados em Angola
+enum PaymentMethod {
+  REFERENCIA           // Multicaixa Express (referência de pagamento)
+  TRANSFERENCIA        // Transferência bancária
+  PAGAMENTO_ENTREGA    // Pagamento na entrega (dinheiro)
+}
+
+/// Itens de uma encomenda — com preço snapshot
+model OrderItem {
+  id              String   @id @default(cuid())
+  orderId         String   @map("order_id")
+  productId       String   @map("product_id")
+  quantidade      Int
+  precoUnitario   Decimal  @map("preco_unitario") @db.Decimal(12, 2) // Snapshot do preço no momento da compra
+  createdAt       DateTime @default(now()) @map("created_at")
+
+  // Relações
+  order           Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  product         Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@map("order_items")
+}
+
+// ============================================
+// MODELOS DE AVALIAÇÕES (REVIEWS)
+// ============================================
+
+/// Avaliações de produtos — apenas utilizadores que compraram
+model Review {
+  id          String   @id @default(cuid())
+  productId   String   @map("product_id")
+  userId      String   @map("user_id")
+  rating      Int      // 1-5 estrelas
+  comentario  String?  @db.Text
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relações
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  // Um utilizador só pode avaliar um produto uma vez
+  @@unique([productId, userId])
+  @@index([productId])
+  @@index([userId])
+  @@map("reviews")
+}
+
+// ============================================
+// MODELOS DE ENDEREÇOS
+// ============================================
+
+/// Endereços de entrega do utilizador
+/// Nota: Em Angola, muitas moradas não têm código postal formal,
+/// por isso incluímos um campo "referência" para ajudar na localização.
+model Address {
+  id          String  @id @default(cuid())
+  userId      String  @map("user_id")
+  nome        String  @db.VarChar(255) // Nome do destinatário
+  telefone    String  @db.VarChar(20)  // Telefone para contacto
+  rua         String  @db.VarChar(255) // Rua/avenida
+  bairro      String  @db.VarChar(255) // Bairro (muito usado em Angola)
+  municipio   String  @db.VarChar(255) // Município
+  provincia   String  @db.VarChar(255) // Província
+  referencia  String? @db.VarChar(255) // Ponto de referência (ex: "ao lado do pharmacy XX")
+  padrao      Boolean @default(false)  // Se é o endereço padrão
+  createdAt   DateTime @default(now()) @map("created_at")
+  updatedAt   DateTime @updatedAt @map("updated_at")
+
+  // Relações
+  user        User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+  @@map("addresses")
+}
+
+// ============================================
+// MODELOS DE FAVORITOS (WISHLIST)
+// ============================================
+
+/// Lista de favoritos do utilizador
+model Wishlist {
+  id          String   @id @default(cuid())
+  userId      String   @map("user_id")
+  productId   String   @map("product_id")
+  createdAt   DateTime @default(now()) @map("created_at")
+
+  // Relações
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  product     Product  @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  // Um utilizador só pode favoritar um produto uma vez
+  @@unique([userId, productId])
+  @@index([userId])
+  @@index([productId])
+  @@map("wishlist")
+}
+
+// ============================================
+// MODELOS DE CUPÕES/DESCONTOS
+// ============================================
+
+/// Cupões de desconto
+model Coupon {
+  id              String      @id @default(cuid())
+  codigo          String      @unique @db.VarChar(50) // Código do cupão (ex: "DESCONTO10")
+  descricao       String?     @db.Text
+  tipo            CouponType @default(PERCENTAGEM) // Tipo de desconto
+  valor           Decimal     @db.Decimal(10, 2) // Valor do desconto (% ou valor fixo)
+  valorMinimo     Decimal?    @db.Decimal(12, 2) @map("valor_minimo") // Compra mínima para usar
+  usoMaximo       Int?        @map("uso_maximo") // Nº máximo de usos (null = ilimitado)
+  usoAtual        Int         @default(0) @map("uso_atual") // Nº de usos até agora
+  dataInicio      DateTime?   @map("data_inicio") // Data de início de validade
+  dataFim         DateTime?   @map("data_fim") // Data fim de validade
+  ativo           Boolean     @default(true)
+  createdAt       DateTime    @default(now()) @map("created_at")
+  updatedAt       DateTime    @updatedAt @map("updated_at")
+
+  // Relações
+  orders          Order[]
+
+  @@map("coupons")
+}
+
+/// Tipo de cupão
+enum CouponType {
+  PERCENTAGEM    // Desconto em percentagem (ex: 10%)
+  VALOR_FIXO     // Valor fixo de desconto (ex: 5000 Kz)
+  FRETE_GRATIS   // Entrega grátis
+}

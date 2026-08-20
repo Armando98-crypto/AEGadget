@@ -1,0 +1,378 @@
+/* =========================================================
+   AEGADGET — Design System
+   Lubango, Angola · loja de gadgets & eletrónica
+   Direção: "Carga total" — o vocabulário visual da energia:
+   portas de carregamento, cantos cortados como cartão SIM,
+   traços de circuito, indicadores tipo bateria.
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Archivo+Black&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap');
+
+:root{
+  /* ---- cor ---- */
+  --ink:        #17130F;   /* quase-preto, quente */
+  --ink-soft:   #4A4038;
+  --white:      #FFFFFF;
+  --paper:      #FFFBF8;
+  --orange:     #FF5A1F;   /* laranja de marca */
+  --orange-deep:#C7390B;   /* hover / profundidade */
+  --orange-soft:#FFE6D6;   /* fundo suave */
+  --amber:      #FFB020;   /* faísca / segundo acento */
+  --hairline:   #F0DECF;   /* linhas finas */
+  --hairline-2: #E7D2BE;
+
+  /* ---- tipo ---- */
+  --f-display: 'Archivo Black', sans-serif;
+  --f-head:    'Space Grotesk', sans-serif;
+  --f-body:    'Inter', sans-serif;
+  --f-mono:    'JetBrains Mono', monospace;
+
+  /* ---- forma ---- */
+  --notch: 22px; /* tamanho do corte de canto */
+  --radius-sm: 3px;
+}
+
+*,*::before,*::after{ box-sizing:border-box; }
+html{ scroll-behavior:smooth; }
+body{
+  margin:0;
+  background:var(--white);
+  color:var(--ink);
+  font-family:var(--f-body);
+  font-size:16px;
+  line-height:1.55;
+  -webkit-font-smoothing:antialiased;
+}
+img{ max-width:100%; display:block; }
+a{ color:inherit; text-decoration:none; }
+ul{ list-style:none; margin:0; padding:0; }
+button{ font-family:inherit; cursor:pointer; }
+input,select,textarea{ font-family:inherit; font-size:1rem; }
+
+.wrap{
+  max-width:1240px;
+  margin:0 auto;
+  padding:0 32px;
+}
+@media(max-width:640px){ .wrap{ padding:0 20px; } }
+
+/* ---------------------------------------------------------
+   Tipografia utilitária
+--------------------------------------------------------- */
+.eyebrow{
+  font-family:var(--f-mono);
+  font-size:.72rem;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--orange-deep);
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+}
+.eyebrow::before{
+  content:'';
+  width:7px; height:7px;
+  background:var(--orange);
+  border-radius:1px;
+  display:inline-block;
+}
+h1,h2,h3,h4{
+  font-family:var(--f-head);
+  font-weight:700;
+  margin:0;
+  color:var(--ink);
+  letter-spacing:-.01em;
+}
+.display{
+  font-family:var(--f-display);
+  text-transform:uppercase;
+  line-height:.92;
+  letter-spacing:-.01em;
+}
+.mono-tag{
+  font-family:var(--f-mono);
+  font-size:.78rem;
+  letter-spacing:.02em;
+}
+
+/* ---------------------------------------------------------
+   Traço de circuito — divisor decorativo assinatura
+--------------------------------------------------------- */
+.circuit{
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:var(--hairline-2);
+}
+.circuit::before,.circuit::after{
+  content:'';
+  flex:1;
+  height:1px;
+  background:repeating-linear-gradient(90deg,var(--hairline-2) 0 6px, transparent 6px 11px);
+}
+.circuit-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--orange);
+  box-shadow:0 0 0 3px var(--orange-soft);
+}
+
+/* ---------------------------------------------------------
+   Botões
+--------------------------------------------------------- */
+.btn{
+  --pad-y: 14px;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  gap:10px;
+  padding:var(--pad-y) 26px;
+  font-family:var(--f-head);
+  font-weight:600;
+  font-size:.92rem;
+  letter-spacing:.01em;
+  border:1.5px solid var(--ink);
+  background:var(--ink);
+  color:var(--white);
+  clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 14px, 100% 100%, 0 100%);
+  transition:transform .15s ease, background .15s ease, border-color .15s ease;
+  white-space:nowrap;
+}
+.btn:hover{ background:var(--orange-deep); border-color:var(--orange-deep); transform:translateY(-1px); }
+.btn:active{ transform:translateY(0); }
+.btn-primary{ background:var(--orange); border-color:var(--orange); color:var(--white); }
+.btn-primary:hover{ background:var(--orange-deep); border-color:var(--orange-deep); }
+.btn-outline{ background:transparent; color:var(--ink); border-color:var(--ink); }
+.btn-outline:hover{ background:var(--ink); color:var(--white); }
+.btn-ghost{
+  background:transparent; color:var(--ink); border:none; clip-path:none;
+  padding:8px 0; font-weight:600; border-bottom:1.5px solid var(--ink);
+}
+.btn-ghost:hover{ color:var(--orange-deep); border-color:var(--orange-deep); transform:none; }
+.btn-block{ width:100%; }
+.btn-sm{ --pad-y:10px; padding:10px 18px; font-size:.82rem; }
+
+/* ---------------------------------------------------------
+   Cabeçalho / navegação
+--------------------------------------------------------- */
+.topbar{
+  background:var(--ink);
+  color:#EFE6DC;
+  font-family:var(--f-mono);
+  font-size:.74rem;
+  letter-spacing:.03em;
+}
+.topbar .wrap{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  padding-top:8px;
+  padding-bottom:8px;
+  flex-wrap:wrap;
+  gap:6px;
+}
+.topbar span{ opacity:.85; }
+.topbar strong{ color:var(--amber); font-weight:500; }
+
+header.site{
+  position:sticky; top:0; z-index:50;
+  background:rgba(255,255,255,.92);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--hairline);
+}
+.nav{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:16px 0;
+  gap:24px;
+}
+.logo{
+  display:flex; align-items:center; gap:10px;
+  font-family:var(--f-head); font-weight:700; font-size:1.18rem;
+  color:var(--ink);
+}
+.logo .bolt{
+  width:30px;height:30px;
+  background:var(--ink);
+  clip-path: polygon(0 0, 100% 0, 100% 60%, 60% 60%, 60% 100%, 0 40%);
+  position:relative;
+  flex:none;
+}
+.logo .bolt::after{
+  content:'';
+  position:absolute; inset:0;
+  background:var(--orange);
+  clip-path: polygon(58% 8%, 92% 8%, 55% 52%, 78% 52%, 30% 92%, 42% 56%, 12% 56%);
+}
+.logo b{ color:var(--orange-deep); }
+
+.navlinks{
+  display:flex; gap:32px;
+  font-family:var(--f-head); font-weight:600; font-size:.92rem;
+}
+.navlinks a{ position:relative; padding:4px 0; color:var(--ink-soft); }
+.navlinks a:hover, .navlinks a.active{ color:var(--ink); }
+.navlinks a.active::after{
+  content:''; position:absolute; left:0; right:0; bottom:-4px; height:2px; background:var(--orange);
+}
+
+.navactions{ display:flex; align-items:center; gap:18px; }
+.iconbtn{
+  position:relative;
+  width:38px;height:38px;
+  display:flex; align-items:center; justify-content:center;
+  border:1.5px solid var(--hairline-2);
+  background:var(--white);
+  clip-path: polygon(0 0, calc(100% - 8px) 0, 100% 8px, 100% 100%, 0 100%);
+  transition:border-color .15s;
+}
+.iconbtn:hover{ border-color:var(--orange); }
+.iconbtn svg{ width:18px;height:18px; stroke:var(--ink); }
+.cart-count{
+  position:absolute; top:-7px; right:-7px;
+  background:var(--orange); color:#fff;
+  font-family:var(--f-mono); font-size:.65rem; font-weight:700;
+  min-width:17px; height:17px; border-radius:50%;
+  display:flex; align-items:center; justify-content:center;
+  border:2px solid var(--white);
+}
+.burger{ display:none; }
+
+@media(max-width:900px){
+  .navlinks{ display:none; }
+  .burger{
+    display:flex; width:38px;height:38px;
+    align-items:center; justify-content:center;
+    border:1.5px solid var(--hairline-2); background:none;
+  }
+}
+
+/* ---------------------------------------------------------
+   Cartões com canto cortado — elemento de assinatura
+   (evoca uma porta USB-C / cartão SIM: um canto "encaixa")
+--------------------------------------------------------- */
+.notch-card{
+  position:relative;
+  background:var(--paper);
+  border:1px solid var(--hairline);
+  clip-path: polygon(0 0, calc(100% - var(--notch)) 0, 100% var(--notch), 100% 100%, 0 100%);
+}
+.notch-card::before{
+  content:'';
+  position:absolute; top:0; right:0;
+  width:0; height:0;
+  border-style:solid;
+  border-width:0 var(--notch) var(--notch) 0;
+  border-color: transparent var(--orange-soft) transparent transparent;
+  transition:border-color .2s ease;
+}
+.notch-card:hover::before{ border-color:transparent var(--orange) transparent transparent; }
+
+/* ---------------------------------------------------------
+   Indicador tipo "bateria" — usado para stock
+--------------------------------------------------------- */
+.charge{
+  display:flex; align-items:center; gap:8px;
+  font-family:var(--f-mono); font-size:.72rem; color:var(--ink-soft);
+}
+.charge-cell{ width:5px; height:11px; background:var(--hairline-2); }
+.charge-cell.on{ background:var(--orange); }
+.charge-cell.low{ background:var(--amber); }
+
+/* ---------------------------------------------------------
+   Secções gerais
+--------------------------------------------------------- */
+section{ padding:88px 0; }
+@media(max-width:768px){ section{ padding:56px 0; } }
+
+.section-head{
+  display:flex; justify-content:space-between; align-items:flex-end;
+  gap:24px; margin-bottom:40px; flex-wrap:wrap;
+}
+
+footer.site{
+  background:var(--ink);
+  color:#DDD2C6;
+  padding:64px 0 28px;
+  margin-top:60px;
+}
+footer.site .wrap{
+  display:grid;
+  grid-template-columns:1.4fr 1fr 1fr 1fr;
+  gap:40px;
+}
+footer.site h4{ color:#fff; font-family:var(--f-head); font-size:.92rem; margin-bottom:16px; letter-spacing:.02em;}
+footer.site ul li{ margin-bottom:9px; font-size:.88rem; }
+footer.site ul li a:hover{ color:var(--amber); }
+footer.site .bottom{
+  border-top:1px solid #2C261F;
+  margin-top:48px; padding-top:22px;
+  display:flex; justify-content:space-between; flex-wrap:wrap; gap:10px;
+  font-family:var(--f-mono); font-size:.72rem; color:#8A7F72;
+}
+footer.site .logo b{ color:var(--amber); }
+footer.site .logo{ color:#fff; margin-bottom:14px; }
+@media(max-width:768px){
+  footer.site .wrap{ grid-template-columns:1fr 1fr; }
+}
+
+/* ---------------------------------------------------------
+   Utilitários de grelha
+--------------------------------------------------------- */
+.grid{ display:grid; gap:26px; }
+.grid-4{ grid-template-columns:repeat(4,1fr); }
+.grid-3{ grid-template-columns:repeat(3,1fr); }
+.grid-2{ grid-template-columns:repeat(2,1fr); }
+@media(max-width:980px){ .grid-4{ grid-template-columns:repeat(2,1fr);} .grid-3{ grid-template-columns:repeat(2,1fr);} }
+@media(max-width:640px){ .grid-4,.grid-3,.grid-2{ grid-template-columns:1fr; } }
+
+.badge{
+  display:inline-flex; align-items:center; gap:6px;
+  font-family:var(--f-mono); font-size:.68rem; letter-spacing:.04em;
+  padding:5px 10px; text-transform:uppercase;
+  background:var(--orange-soft); color:var(--orange-deep);
+}
+.badge.dark{ background:var(--ink); color:var(--amber); }
+
+.price{
+  font-family:var(--f-mono); font-weight:700; font-size:1.15rem; color:var(--ink);
+}
+.price small{ font-weight:400; font-size:.7rem; color:var(--ink-soft); }
+.price-old{
+  font-family:var(--f-mono); font-size:.82rem; color:#B2A392; text-decoration:line-through;
+}
+
+/* breadcrumbs */
+.crumbs{
+  font-family:var(--f-mono); font-size:.76rem; color:var(--ink-soft);
+  display:flex; gap:8px; align-items:center; padding:22px 0 0;
+}
+.crumbs a:hover{ color:var(--orange-deep); }
+.crumbs span{ opacity:.4; }
+
+/* forms */
+.field{ margin-bottom:20px; }
+.field label{
+  display:block; font-family:var(--f-head); font-weight:600; font-size:.82rem;
+  margin-bottom:8px; color:var(--ink);
+}
+.field input, .field select, .field textarea{
+  width:100%; padding:13px 15px;
+  border:1.5px solid var(--hairline-2);
+  background:var(--white);
+  color:var(--ink);
+  outline:none;
+  transition:border-color .15s;
+}
+.field input:focus, .field select:focus, .field textarea:focus{ border-color:var(--orange); }
+.field small{ display:block; margin-top:6px; font-size:.76rem; color:var(--ink-soft); }
+.field-row{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+@media(max-width:560px){ .field-row{ grid-template-columns:1fr; } }
+
+/* skip link / focus visibility (acessibilidade) */
+a:focus-visible, button:focus-visible, input:focus-visible{
+  outline:2px solid var(--orange-deep); outline-offset:2px;
+}
+@media (prefers-reduced-motion: reduce){
+  *{ animation-duration:0.001ms !important; transition-duration:0.001ms !important; scroll-behavior:auto !important; }
+}
