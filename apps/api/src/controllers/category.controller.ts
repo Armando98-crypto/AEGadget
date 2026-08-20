@@ -75,7 +75,7 @@ export async function criarCategoria(req: Request, res: Response): Promise<void>
 
 export async function atualizarCategoria(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const dados = req.body;
 
     const categoria = await prisma.category.update({
@@ -99,7 +99,7 @@ export async function atualizarCategoria(req: Request, res: Response): Promise<v
 
 export async function eliminarCategoria(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     // Verificar se tem produtos associados
     const produtos = await prisma.product.count({ where: { categoryId: id } });

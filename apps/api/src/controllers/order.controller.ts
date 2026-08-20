@@ -203,7 +203,7 @@ export async function listarEncomendas(req: Request, res: Response): Promise<voi
         items: {
           include: {
             product: {
-              select: { nome: true, slug: true, imagemUrl: false },
+              select: { nome: true, slug: true },
             },
           },
         },
@@ -226,7 +226,7 @@ export async function listarEncomendas(req: Request, res: Response): Promise<voi
  */
 export async function obterEncomenda(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const userId = req.user!.sub;
     const role = req.user!.role;
 
@@ -269,7 +269,7 @@ export async function obterEncomenda(req: Request, res: Response): Promise<void>
  */
 export async function atualizarEstado(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const dados = atualizarEstadoSchema.parse(req.body);
 
     const encomenda = await prisma.order.findUnique({ where: { id } });

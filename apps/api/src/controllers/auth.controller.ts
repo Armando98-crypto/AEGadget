@@ -51,7 +51,7 @@ function gerarAccessToken(payload: JWTPayload): string {
   return jwt.sign(
     { sub: payload.sub, email: payload.email, role: payload.role },
     secret,
-    { expiresIn }
+    { expiresIn } as jwt.SignOptions
   );
 }
 
@@ -64,7 +64,7 @@ function gerarRefreshToken(payload: JWTPayload): string {
   return jwt.sign(
     { sub: payload.sub, email: payload.email, role: payload.role },
     secret,
-    { expiresIn }
+    { expiresIn } as jwt.SignOptions
   );
 }
 

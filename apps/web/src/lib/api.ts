@@ -27,8 +27,8 @@ export async function apiRequest<T>(
 ): Promise<T> {
   const { token, isFormData, ...fetchOptions } = options;
 
-  const headers: HeadersInit = {
-    ...options.headers,
+  const headers: Record<string, string> = {
+    ...(options.headers as Record<string, string>),
   };
 
   // Só adicionar Content-Type JSON se não for FormData

@@ -167,7 +167,7 @@ export async function adicionarItem(req: Request, res: Response): Promise<void> 
  */
 export async function atualizarQuantidade(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const dados = atualizarQuantidadeSchema.parse(req.body);
 
     const item = await prisma.cartItem.findUnique({
@@ -208,7 +208,7 @@ export async function atualizarQuantidade(req: Request, res: Response): Promise<
  */
 export async function removerItem(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     const item = await prisma.cartItem.findUnique({
       where: { id },

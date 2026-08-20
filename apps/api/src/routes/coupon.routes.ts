@@ -77,7 +77,7 @@ router.post("/", autenticar, verificarRole("ADMIN"), async (req: Request, res: R
  */
 router.delete("/:id", autenticar, verificarRole("ADMIN"), async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     await prisma.coupon.delete({ where: { id } });
     res.json({ message: "Cupão eliminado" });
   } catch (error) {
@@ -92,7 +92,7 @@ router.delete("/:id", autenticar, verificarRole("ADMIN"), async (req: Request, r
  */
 router.put("/:id", autenticar, verificarRole("ADMIN"), async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const { ativo } = req.body;
 
     const cupao = await prisma.coupon.update({

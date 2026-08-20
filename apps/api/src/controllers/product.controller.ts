@@ -129,7 +129,7 @@ export async function listarProdutos(req: Request, res: Response): Promise<void>
  */
 export async function obterProduto(req: Request, res: Response): Promise<void> {
   try {
-    const { slug } = req.params;
+    const { slug } = req.params as { slug: string };
 
     const produto = await prisma.product.findUnique({
       where: { slug },
@@ -247,7 +247,7 @@ export async function criarProduto(req: Request, res: Response): Promise<void> {
  */
 export async function atualizarProduto(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
     const dados = req.body;
 
     // Verificar se o produto existe
@@ -314,7 +314,7 @@ export async function atualizarProduto(req: Request, res: Response): Promise<voi
  */
 export async function eliminarProduto(req: Request, res: Response): Promise<void> {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     const existente = await prisma.product.findUnique({ where: { id } });
     if (!existente) {

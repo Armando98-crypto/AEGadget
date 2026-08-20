@@ -78,7 +78,7 @@ router.post("/", autenticar, async (req: Request, res: Response) => {
  */
 router.get("/product/:productId", async (req: Request, res: Response) => {
   try {
-    const { productId } = req.params;
+    const { productId } = req.params as { productId: string };
 
     const reviews = await prisma.review.findMany({
       where: { productId },
@@ -95,7 +95,7 @@ router.get("/product/:productId", async (req: Request, res: Response) => {
     res.json({
       reviews,
       media: media._avg.rating,
-      total: media._count.rating,
+      total: (media._count as { rating: number }).rating,
     });
   } catch (error) {
     console.error("Erro ao listar reviews:", error);
@@ -109,7 +109,7 @@ router.get("/product/:productId", async (req: Request, res: Response) => {
  */
 router.delete("/:id", autenticar, async (req: Request, res: Response) => {
   try {
-    const { id } = req.params;
+    const { id } = req.params as { id: string };
 
     const review = await prisma.review.findUnique({ where: { id } });
     if (!review) {

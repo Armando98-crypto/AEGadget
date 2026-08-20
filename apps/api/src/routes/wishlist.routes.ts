@@ -58,7 +58,7 @@ router.get("/", autenticar, async (req: Request, res: Response) => {
 router.post("/:productId", autenticar, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.sub;
-    const { productId } = req.params;
+    const { productId } = req.params as { productId: string };
 
     // Verificar se o produto existe
     const produto = await prisma.product.findUnique({ where: { id: productId } });
@@ -96,7 +96,7 @@ router.post("/:productId", autenticar, async (req: Request, res: Response) => {
 router.get("/check/:productId", autenticar, async (req: Request, res: Response) => {
   try {
     const userId = req.user!.sub;
-    const { productId } = req.params;
+    const { productId } = req.params as { productId: string };
 
     const existente = await prisma.wishlist.findFirst({
       where: { userId, productId },

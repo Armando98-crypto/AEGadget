@@ -40,7 +40,7 @@ export default function ReviewForm({ productId, onReviewCreated }: ReviewFormPro
     try {
       await apiRequest("/reviews", {
         method: "POST",
-        token: accessToken,
+        token: accessToken ?? undefined,
         body: JSON.stringify({
           productId,
           rating,
