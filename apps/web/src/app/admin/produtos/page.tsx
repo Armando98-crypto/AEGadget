@@ -54,7 +54,7 @@ export default function AdminProdutosPage() {
 
   useEffect(() => {
     Promise.all([
-      apiRequest<Produto[]>("/products?limit=50&estado=ATIVO", { token: accessToken! }),
+      apiRequest<{ data: Produto[]; total: number }>("/products?limit=50&estado=ATIVO", { token: accessToken! }),
       apiRequest<Categoria[]>("/categories"),
     ])
       .then(([prods, cats]) => {
@@ -125,7 +125,7 @@ export default function AdminProdutosPage() {
           body: JSON.stringify(dados),
         });
       }
-      const res = await apiRequest<Produto[]>("/products?limit=50&estado=ATIVO", { token: accessToken! });
+      const res = await apiRequest<{ data: Produto[]; total: number }>("/products?limit=50&estado=ATIVO", { token: accessToken! });
       setProdutos(res.data || []);
       setModalAberto(false);
     } catch (error) {
