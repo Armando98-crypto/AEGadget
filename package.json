@@ -10,12 +10,12 @@
     "dev": "npm run dev:api & npm run dev:web",
     "build": "npm run build --workspace=apps/web && npm run build --workspace=apps/api",
     "lint": "npm run lint --workspaces",
-    "db:migrate": "npx prisma migrate dev",
-    "db:generate": "npx prisma generate",
-    "db:studio": "npx prisma studio",
-    "db:seed": "npx prisma db seed"
+    "db:migrate": "npx prisma migrate dev --schema=apps/api/prisma/schema.prisma",
+    "db:generate": "npx prisma generate --schema=apps/api/prisma/schema.prisma",
+    "db:studio": "npx prisma studio --schema=apps/api/prisma/schema.prisma",
+    "db:seed": "npx prisma db seed --schema=apps/api/prisma/schema.prisma"
   },
   "prisma": {
-    "seed": "npx tsx prisma/seed.ts"
+    "seed": "npx tsx apps/api/prisma/seed.ts"
   }
 }
