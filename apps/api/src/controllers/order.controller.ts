@@ -61,7 +61,7 @@ export async function criarEncomenda(req: Request, res: Response): Promise<void>
     }
 
     // Calcular total
-    const subtotal = carrinho.items.reduce((acc, item) => {
+    const subtotal = carrinho.items.reduce((acc: number, item: { product: { preco: unknown }; quantidade: number }) => {
       return acc + Number(item.product.preco) * item.quantidade;
     }, 0);
 
